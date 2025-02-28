@@ -8,5 +8,13 @@ class Loan :
         self.book = book
         self.issued_at = date.today()
         self.due_date = self.issued_at + timedelta(days=days)
+
+    @property
+    def days_due_in(self) :
+        return (self.issued_at - self.due_date).days
+
+    def send_notification(self) :
+        self.user.loan_alert(self.book,self.days_due_in)
+
         
 
