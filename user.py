@@ -15,6 +15,7 @@ class User(ABC) :
         self.__pass_word = bcrypt.hashpw(pass_word,bcrypt.gensalt())
         self.join_date = datetime.now()
         self._notification = []
+        self.loans = []
 
     @property
     def name(self) :
@@ -26,13 +27,11 @@ class User(ABC) :
         if value[0] : self.first_name = value[0]
         if value[1] : self.last_name = value[1]
 
-    def view_dashboard(self):
-        return f"Welcome {self.name}! \n"\
-        + "You currently have x book(s) Loaned \n"\
-        + "x new notifications"
+    # def view_dashboard(self):
+    #     return f"Welcome {self.name}! \n"\
+    #     + "You currently have x book(s) Loaned \n"\
+    #     + "x new notifications"
         
-        
-    
     def authenticate_pw(self,pw) :
         session = uuid.uuid4() if bcrypt.checkpw(pw,self.__pass_word) else None
         return session
@@ -43,6 +42,7 @@ class User(ABC) :
     
     def loan_alert(self,book : Book,day):
         self._notification.append(f"The book \"{book.title}\" needs to be returned in {days(day)}")
+
 
 def days(day):
     if day > 1 :
