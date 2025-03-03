@@ -1,7 +1,8 @@
 from user import User
+from member import Member
 from loan import Loan
 
-class Librarian(User):
+class Librarian(Member):
     def view_dashboard(self):
         return f"Welcome {self.name}! \n"\
         + "You currently have x book(s) Loaned \n"\

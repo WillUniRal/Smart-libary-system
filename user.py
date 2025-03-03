@@ -21,11 +21,21 @@ class User(ABC) :
     def name(self) :
         return self.first_name+" "+self.last_name
     
+    @property
+    def email(self) :
+        return self.__email
+    
     @name.setter
-    def set_name(self, value) :
+    def name(self, value) :
         if not isinstance(value,tuple) : raise ValueError("Only accepts type (tuple)")
         if value[0] : self.first_name = value[0]
         if value[1] : self.last_name = value[1]
+
+    @email.setter
+    def email(self, value) :
+        #send confirmation email
+        self.email = value
+
 
     # def view_dashboard(self):
     #     return f"Welcome {self.name}! \n"\
