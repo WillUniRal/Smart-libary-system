@@ -10,10 +10,11 @@ class Server :
         self.catalogue : list[Book] = []
 
     def find_user(self, email) :
+        user : User = None
         for user in self.__users :
             if user.email == email :
                 return user
-        raise UserNotFoundError
+        raise UserNotFoundError("That user isn't in the dataset")
             
     def register(self, user : User) :
         self.__users.append(user)
