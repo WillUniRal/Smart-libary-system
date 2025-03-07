@@ -1,7 +1,9 @@
+
 from book import Book
 from abc import ABC, abstractmethod
 from random import randint
 from datetime import datetime
+# from loan import Loan (imports user)
 
 import bcrypt
 import uuid
@@ -12,10 +14,16 @@ class User(ABC) :
         self.last_name = lname
         self.id = randint(100000000,999999999)
         self.__email = email
-        self.__pass_word = bcrypt.hashpw(pass_word,bcrypt.gensalt())
+
+        salt = bcrypt.gensalt()
+        if isinstance(pass_word,str) : pw_bytes = bytes(pass_word,encoding="utf-8")
+
+        self.__pass_word = bcrypt.hashpw(pw_bytes,salt)
+
         self.join_date = datetime.now()
         self._notification = []
-        self.loans = []
+        self.loans = [] # : list[Loan]
+        self.__session = None
 
     @property
     def name(self) :
@@ -30,6 +38,7 @@ class User(ABC) :
         if not isinstance(value,tuple) : raise ValueError("Only accepts type (tuple)")
         if value[0] : self.first_name = value[0]
         if value[1] : self.last_name = value[1]
+        # name = 
 
     @email.setter
     def email(self, value) :
@@ -43,7 +52,9 @@ class User(ABC) :
     #     + "x new notifications"
         
     def authenticate_pw(self,pw) :
+        pw = bytes(pw,encoding="utf-8")
         session = uuid.uuid4() if bcrypt.checkpw(pw,self.__pass_word) else None
+        self.__session = session
         return session
             
     @abstractmethod

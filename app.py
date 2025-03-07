@@ -1,16 +1,14 @@
 from member import Member
-from librarian import Librarian
 from getpass import getpass
-import dataset
+from dataset import server, UserNotFoundError
 
 # Client console based for testing structure
 # Has all functional requirements for end user 
 
-server = dataset.Server()
+
 
 def login() :
     
-
     error_msg = "The email or password entered is incorrect"
     while True :
         user_email = input("Please enter your email: ")
@@ -18,8 +16,9 @@ def login() :
 
         try :
             user = server.find_user(user_email)
-        except dataset.UserNotFoundError :
+        except UserNotFoundError as e :
             print(error_msg)
+            # print(e.with_traceback())
             continue
         except:
             print(f"An unknown error occured, please try again")

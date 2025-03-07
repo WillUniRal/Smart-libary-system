@@ -1,23 +1,27 @@
-from user import User
+# from user import User
 from book import Book
-from builtins import LookupError
+from uuid import UUID
+from admin import Admin,Librarian,Member,User
+# from builtins import LookupError
 
 class UserNotFoundError(LookupError) : ...
 
 class Server :
     def __init__(self):
-        self.__users : list[User] = []
+        self.__users : dict[str,User] = {}
         self.catalogue : list[Book] = []
 
     def find_user(self, email) :
         user : User = None
-        for user in self.__users :
-            if user.email == email :
-                return user
-        raise UserNotFoundError("That user isn't in the dataset")
+        return self.__users[email]
             
-    def register(self, user : User) :
-        self.__users.append(user)
+    def register(self, *users : User) :
+        for i,user in enumerate(users) :
+            if isinstance(user,User) :
+                print(f"(SERVER) {i}: Succefully registered {user.name}, welcome to the libary")
+                self.__users[user.email] = user
+            else :
+                print(f"(SERVER) {i}: The user that was entered into the system is not a valid user")
 
     def find_book(self, search) :
         hits : dict[str,Book] = {}
@@ -28,3 +32,12 @@ class Server :
                 hits[books.author] = books
 
         return hits
+    
+server = Server()
+
+e1 = Member("Freya","Myers","girlbossfreya@superrito.com","123IloveStanley") # fake identity
+e2 = Librarian("Kiyumi","Maida","kyotoshidosha@bytedigi.com","nekoNekoNiii") #emailfake.com
+e3 = Admin("Vladlen","Voronov","blyat448@armyspy.com","Lebedinoe883")
+
+server.register(e1,e2,e3)
+

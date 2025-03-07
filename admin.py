@@ -1,8 +1,7 @@
-from user import User
-from member import Member
+
 from datetime import date
 from dateutil.relativedelta import relativedelta
-from librarian import Librarian
+from librarian import User,Member,Librarian
 
 class Admin(Librarian):
     def view_dashboard(self):

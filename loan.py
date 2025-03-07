@@ -1,3 +1,4 @@
+from __future__ import annotations
 from book import Book
 from user import User
 from datetime import date

@@ -1,5 +1,5 @@
-from user import User
-from member import Member
+# from __future__ import annotations
+from member import Member,User
 from loan import Loan
 
 class Librarian(Member):
