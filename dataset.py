@@ -10,10 +10,23 @@ class Server :
     def __init__(self):
         self.__users : dict[str,User] = {}
         self.catalogue : list[Book] = []
+        self.sessions : dict[UUID,User]
 
     def find_user(self, email) :
         user : User = None
-        return self.__users[email]
+        try :
+            user = self.__users[email]
+        except KeyError:
+            return None
+        return user
+    
+    def log_in(self, user : User, pw) :
+        session = user.authenticate_pw(pw)
+        if session :
+            self.sessions[session] = user
+            return session
+        else :
+            return None
             
     def register(self, *users : User) :
         for i,user in enumerate(users) :
