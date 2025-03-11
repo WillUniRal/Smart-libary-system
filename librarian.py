@@ -1,6 +1,7 @@
 # from __future__ import annotations
 from member import Member,User
 from loan import Loan
+from user import Menu
 
 class Librarian(Member):
     def view_dashboard(self):
@@ -8,11 +9,7 @@ class Librarian(Member):
         + "You currently have x book(s) Loaned \n"\
         + "x new notifications"
     
-    @property
-    def sub_menu() :
-        return super().sub_menu
-    
-    @sub_menu
+    @Menu.sub_menu
     def approve_loan(self, user : User, book, days):
         if len(user.loans) > 3 :
             print("This user can't loan more than 2 books at once")

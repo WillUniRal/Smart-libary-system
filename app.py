@@ -1,19 +1,24 @@
 from member import Member
 from getpass import getpass
 from dataset import server, UserNotFoundError,User
-
+from user import Menu
 # Client console based for testing structure
 # Has all functional requirements for end user 
 
 
-def auth(func) :
-    def wrapper(session,*args,**kwargs) :
-        user = server.sessions[session]
-        if user :
-            func(*args,**kwargs,user=user)
-        else :
-            print("Unauthorised")
-    return wrapper
+def auth(session) :
+    def decorator(func) :
+        def wrapper(*args,**kwargs) :
+            print(session)
+            for sessions in server.sessions.keys() :
+                print("avalible:",sessions)
+            user = server.sessions[session]
+            if user :
+                func(*args,**kwargs,user=user)
+            else :
+                print("Unauthorised")
+        return wrapper
+    return decorator
 
 def login() :
     
@@ -41,9 +46,12 @@ def login() :
 
 sess = login()
 
+print(sess)
+
 @auth(sess)
 def open_menu(user : User = None):
-    user.view_dashboard()
+    print(user.view_dashboard())
+    Menu.debug_sub_menus()
 
 open_menu()
 

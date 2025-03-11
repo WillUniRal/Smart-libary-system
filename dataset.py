@@ -10,7 +10,7 @@ class Server :
     def __init__(self):
         self.__users : dict[str,User] = {}
         self.catalogue : list[Book] = []
-        self.sessions : dict[UUID,User]
+        self.sessions : dict[UUID,User] = {}
 
     def find_user(self, email) :
         user : User = None
@@ -20,6 +20,19 @@ class Server :
             return None
         return user
     
+    def get_names(self) :
+        result = {}
+        for user in self.__users.values() :
+            result[user.name] = user
+        return result
+    
+    def search_names(self,search) :
+        hits = {}
+        for key, value in self.get_names().items():
+            if search in key :
+                hits[key] = value
+        return hits
+
     def log_in(self, user : User, pw) :
         session = user.authenticate_pw(pw)
         if session :

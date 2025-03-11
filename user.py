@@ -10,7 +10,6 @@ from datetime import datetime
 # #     from loan import Loan
 
 from utils import Menu
-# user_menu = Menu()
 
 import bcrypt
 import uuid
@@ -21,7 +20,6 @@ class User(ABC) :
         self.last_name = lname
         self.id = randint(100000000,999999999)
         self.__email = email
-        self._menu : Menu = Menu()
 
         salt = bcrypt.gensalt()
         if isinstance(pass_word,str) : pw_bytes = bytes(pass_word,encoding="utf-8")
@@ -32,12 +30,6 @@ class User(ABC) :
         self._notification = []
         self.loans = [] # : list[Loan]
         self.__session = None
-
-    @property
-    def sub_menu(self,func :callable) :
-        def decorator(*args,**kwargs) :
-            func(*args,**kwargs)
-        return decorator
 
     @property
     def name(self) :
@@ -78,11 +70,11 @@ class User(ABC) :
     def loan_alert(self,book : Book,day):
         self._notification.append(f"The book \"{book.title}\" needs to be returned in {days(day)}")
 
-    @sub_menu
+    @Menu.sub_menu
     def book_search(self,name,author,func : callable = print):
         func(name,author)
 
-    @sub_menu
+    @Menu.sub_menu
     def return_a_book(self,loan,book : Book):
         book.return_book()
 
