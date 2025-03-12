@@ -83,6 +83,7 @@ class Server :
         return hits
     
     def get_book(self,srch) :
+        # print(self.catalogue)
         books = self.find_book(srch)
         if not books :
             print("No books found")
@@ -103,7 +104,7 @@ class Server :
                 if not 1 <= option <= len(booky) :
                     print("Not an option")
                     continue
-                return booky[option]
+                return booky[option-1]
                 
 
     

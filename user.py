@@ -74,15 +74,33 @@ class User(ABC) :
     def loan_alert(self,book : Book,day):
         self._notifications.append(f"The book \"{book.title}\" needs to be returned in {days(day)}")
 
-    @Menu.sub_menu()
-    def book_search(self,search_for_titles_or_an_author,func : Callable = print):
-        func(search_for_titles_or_an_author)
+    def get_loan(self) :
+        if len(self.loans) <= 0 : return None
+        print("Books currently loaned: ")
+        while True :
+            for index, loan in enumerate(self.loans,start=1) :
+                print(f"{index}: {loan.book}")
+            try :
+                option = int(input("Select a book> "))
+            except ValueError:
+                print("Invalid option")
+            else :
+                if not 1 <= option <= len(self.loans) :
+                    print("Not an option")
+                    continue
+                return self.loans[option-1]
 
     @Menu.sub_menu()
-    def return_a_book(self,loan,book : Book):
+    def book_search(self,search_for_titles_or_an_author,func):
+
+        book : Book = func(search_for_titles_or_an_author)
+        book.info()
+
+    @Menu.sub_menu()
+    def return_a_book(self,loan):
+        print("hi")
+        book : Book = loan.book
         book.return_book()
-
-
 
 def days(day):
     if day > 1 :

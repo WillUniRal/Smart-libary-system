@@ -1,5 +1,6 @@
 import inspect
 from enum import IntEnum
+# from user import User
 
 class Permission(IntEnum) :
     USER = 0 # Default
@@ -9,21 +10,22 @@ class Permission(IntEnum) :
 
 class Menu:
 
-    menus : list[str] = []
-    arguments : dict[str,tuple] = {}
+    menus : list[tuple] = []
+    arguments : dict[str,tuple[str]] = {}
     premissions : dict[str,Permission] = {}
 
-    def __init__(self, perm : str, server):
+    def __init__(self, perm : str, server, user):
         self.server = server
         self.premission = Permission[perm.upper()]
         self.len : int = 0
+        self.user = user
 
     @classmethod
     def sub_menu(cls) :
         def decorator(func) :
             if func.__name__ in cls.menus : return func
             # add the menu 
-            cls.menus.append(func.__name__)
+            cls.menus.append((func.__name__,func))
             # set up args
             sig = inspect.signature(func)
             params = sig.parameters
@@ -44,12 +46,14 @@ class Menu:
         # Menu.sub_menu() ✅
         
         for func_name in cls.menus :
+            func_name = func_name[0]
             print(f"Function: {func_name}\nBelongs to: {cls.premissions[func_name]}\nArgs:")
             for args in cls.arguments[func_name] : print(args)
                 
     def __str__(self) :
         result = "What would you like to do today: \n"
         for index, sub_menu in enumerate(self.menus,start=1) :
+            sub_menu = sub_menu[0]
             if self.premission < self.premissions[sub_menu] : break
             result += sub_menu.replace("_"," ").capitalize()
             result += ": "+str(index)+"\n"
@@ -58,8 +62,10 @@ class Menu:
     
     def open(self) :
         option = self.get_choice()-1
-        sub_m = self.menus[option]
-        self.get_args(sub_m)
+        sub_m = self.menus[option][0]
+        args = self.get_args(sub_m)
+        # print(args)
+        self.menus[option][1](self.user,*args)
 
     def arg_search(self,arg,func) :
         while True :
@@ -71,7 +77,7 @@ class Menu:
                 return argy
 
     def get_args(self,func_key) :
-        args = []
+        args= []
         for arg in self.arguments[func_key] :
             if arg == "user":
                 args.append(self.arg_search(arg,self.server.get_user))
@@ -80,11 +86,13 @@ class Menu:
                 pass
             elif arg == "book" :
                 args.append(self.arg_search(arg,self.server.get_book))
+            elif arg == "loan" :
+                args.append(self.user.get_loan())
             elif arg == "func" :
                 args.append(self.server.get_book)
             else :
                 n = "n" if arg[0] in ('a','e,','i','o') else ""
-                args.append(input(f"Enter a{n} {arg}: "))
+                args.append(input(f"Enter a{n} {arg.replace("_"," ")}: "))
         return args
 
     def get_choice(self) :

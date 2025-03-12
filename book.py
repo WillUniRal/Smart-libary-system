@@ -16,6 +16,10 @@ class Book():
             return self
         else :
             return None
+        
+    def info(self) :
+        print("Here is some info on this book: ")
+        print(f"Name: {self.title}\nAuthor: {self.author}\nBibliography: {self.bibliography}")
 
     def return_book(self) :
         self.quantity+=1

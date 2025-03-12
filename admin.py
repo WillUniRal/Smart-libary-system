@@ -30,6 +30,11 @@ class Admin(Librarian):
 if __name__ == '__main__' :
     example = Admin("Vladlen","Voronov","blyat448@armyspy.com","Lebedinoe883")
     from dataset import server
-    admin_menu = Menu(example.permission,server)
+    from loan import Loan
+    from book import Book
+    dababy = Book("les go","DaBaby",23423,"very cool book")
+    server.catalogue.append(dababy)
+    example.loans.append(Loan(example,dababy,5))
+    admin_menu = Menu(example.permission,server,example)
 
     admin_menu.open()
