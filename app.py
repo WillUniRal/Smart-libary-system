@@ -47,7 +47,9 @@ sess = login()
 @auth(sess)
 def open_menu(user : User = None):
     print(user.view_dashboard())
-    Menu.debug_sub_menus()
+    # Menu.debug_sub_menus()
+    user_menu = Menu(user.permission)
+    print(user_menu)
 
 open_menu()
 

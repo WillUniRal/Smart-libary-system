@@ -27,7 +27,7 @@ class User(ABC) :
         self.__pass_word = bcrypt.hashpw(pw_bytes,salt)
 
         self.join_date = datetime.now()
-        self._notification = []
+        self._notifications = []
         self.loans = [] # : list[Loan]
         self.__session = None
 
@@ -38,6 +38,10 @@ class User(ABC) :
     @property
     def email(self) :
         return self.__email
+    
+    @property
+    def permission(self) :
+        return type(self).__name__
     
     @name.setter
     def name(self, value) :
@@ -68,11 +72,11 @@ class User(ABC) :
         pass
     
     def loan_alert(self,book : Book,day):
-        self._notification.append(f"The book \"{book.title}\" needs to be returned in {days(day)}")
+        self._notifications.append(f"The book \"{book.title}\" needs to be returned in {days(day)}")
 
     @Menu.sub_menu()
-    def book_search(self,name,author,func : Callable = print):
-        func(name,author)
+    def book_search(self,search_for_titles_or_an_author,func : Callable = print):
+        func(search_for_titles_or_an_author)
 
     @Menu.sub_menu()
     def return_a_book(self,loan,book : Book):

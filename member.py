@@ -7,8 +7,8 @@ class Member(User):
 
     def view_dashboard(self):
         return f"Welcome {self.name}! \n"\
-        + "You currently have x book(s) Loaned \n"\
-        + "x new notifications"
+        + f"You currently have {len(self.loans)} book(s) Loaned \n"\
+        + f"{len(self._notifications)} new notification(s)"
     
 # jaylyn = Member("Jaylyn","Cruz","jaycee@gmail.com")
 # print(jaylyn.view_dashboard())

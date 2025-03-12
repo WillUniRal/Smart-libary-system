@@ -21,17 +21,40 @@ class Server :
         return user
     
     def get_names(self) :
-        result = {}
+        result : dict[str,User]= {}
         for user in self.__users.values() :
             result[user.name] = user
         return result
     
-    def search_names(self,search) :
+    def search_names(self,search : str) :
         hits = {}
         for key, value in self.get_names().items():
-            if search in key :
+            if search.lower() in key.lower() :
                 hits[key] = value
         return hits
+    
+    def get_user(self,name) :
+        search_result = self.search_names(name)
+        hits = list(enumerate(search_result.keys(),start=1))
+
+        if not hits :
+            print("No users found")
+            return None
+        
+        while True :
+            
+            for index, names in hits :
+                print(f"{index}: {names}")
+            try :
+                option = int(input("Which result:"))
+            except ValueError :
+                print("invalid option")
+                continue
+            else :
+                if not 1 <= option <= len(hits) : 
+                    print("Not an option")
+                    continue
+                return search_result[hits[option-1][1]]
 
     def log_in(self, user : User, pw) :
         session = user.authenticate_pw(pw)
@@ -49,15 +72,40 @@ class Server :
             else :
                 print(f"(SERVER) {i}: The user that was entered into the system is not a valid user")
 
-    def find_book(self, search) :
+    def find_book(self, search : str) :
         hits : dict[str,Book] = {}
         for books in self.catalogue :
-            if search in books.title :
+            if search.lower() in books.title.lower() :
                 hits[books.title] = books
-            if search in books.author :
+            if search in books.author.lower() :
                 hits[books.author] = books
 
         return hits
+    
+    def get_book(self,srch) :
+        books = self.find_book(srch)
+        if not books :
+            print("No books found")
+            return None
+        
+        while True :
+            
+            booky = []
+            for index, book in enumerate(books.values(),start=1) :
+                print(f"{index}: {book}")
+                booky.append(book)
+            try :
+                option = int(input("Which result: "))
+            except ValueError :
+                print("Invalid option")
+                continue
+            else :
+                if not 1 <= option <= len(booky) :
+                    print("Not an option")
+                    continue
+                return booky[option]
+                
+
     
 server = Server()
 

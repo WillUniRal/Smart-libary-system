@@ -7,22 +7,29 @@ from librarian import Menu
 class Admin(Librarian):
     def view_dashboard(self):
         return f"Welcome {self.name}! \n"\
-        + "You currently have x book(s) Loaned \n"\
-        + "x new notifications \n"\
+        + f"You currently have {len(self.loans)} book(s) Loaned \n"\
+        + f"{len(self._notifications)} new notification(s)"\
         + "x new Library members this month"
     
-    @property
-    def sub_menu() :
-        return super().sub_menu
+    @Menu.sub_menu()
+    def assign_role(self, user : User, role) :
+        classes = [Member,Librarian,Admin]
+        role_class = next((cls for cls in classes if cls.__name__ == role), None)
+        if role_class :
+            new_role = globals()[role](**vars(user))
+            return new_role
+        else :
+            print("Invalid Role")
+            return None
     
     @Menu.sub_menu()
-    def assign_role(self, object : User, user_class) :
-        new_role = user_class(**vars(object))
-        return new_role
+    def ban_member(self, member : Member, **duration) :
+        member.restricted_until = date.today() + relativedelta(**duration)
     
-    @Menu.sub_menu()
-    def ban_user(self, member : Member, **timekws) :
-        member.restricted_until = date.today() + relativedelta(**timekws)
-    
+#testing
+if __name__ == '__main__' :
+    example = Admin("Vladlen","Voronov","blyat448@armyspy.com","Lebedinoe883")
+    from dataset import server
+    admin_menu = Menu(example.permission,server)
 
-        
+    admin_menu.open()
