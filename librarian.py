@@ -9,7 +9,7 @@ class Librarian(Member):
         + "You currently have x book(s) Loaned \n"\
         + "x new notifications"
     
-    @Menu.sub_menu
+    @Menu.sub_menu()
     def approve_loan(self, user : User, book, days):
         if len(user.loans) > 3 :
             print("This user can't loan more than 2 books at once")

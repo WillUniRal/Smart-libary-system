@@ -15,12 +15,12 @@ class Admin(Librarian):
     def sub_menu() :
         return super().sub_menu
     
-    @Menu.sub_menu
+    @Menu.sub_menu()
     def assign_role(self, object : User, user_class) :
         new_role = user_class(**vars(object))
         return new_role
     
-    @Menu.sub_menu
+    @Menu.sub_menu()
     def ban_user(self, member : Member, **timekws) :
         member.restricted_until = date.today() + relativedelta(**timekws)
     

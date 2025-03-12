@@ -11,6 +11,9 @@ I tried decorators but they aren't called when the function is defined
 """how to get the class name from Menu of the class that called the function"""
 
 # responses are from qwen 2.5 that have been modified and tested 
+
+import inspect
+
 class Menu:
     menus = []
     args = {}
@@ -53,3 +56,17 @@ if __name__ == "__main__":
         func = getattr(obj, func_name)
         func_args = Menu.args.get(func_name, {})
         func(**func_args)
+
+def new_func(param1,param2,kwparam=4) :
+    pass
+
+
+def print_parameter_names(func):
+    # Get the parameters of the function
+    sig = inspect.signature(func)
+    params = sig.parameters
+    # Extract and print the parameter names
+    param_names = list(params.keys())
+    print(f"Parameter names of {func.__name__}: {param_names}")
+
+print_parameter_names(new_func)

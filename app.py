@@ -9,14 +9,12 @@ from user import Menu
 def auth(session) :
     def decorator(func) :
         def wrapper(*args,**kwargs) :
-            print(session)
-            for sessions in server.sessions.keys() :
-                print("avalible:",sessions)
-            user = server.sessions[session]
-            if user :
-                func(*args,**kwargs,user=user)
-            else :
+            try :
+                user = server.sessions[session]
+            except KeyError :
                 print("Unauthorised")
+            else :
+                func(*args,**kwargs,user=user)
         return wrapper
     return decorator
 
@@ -45,8 +43,6 @@ def login() :
             continue
 
 sess = login()
-
-print(sess)
 
 @auth(sess)
 def open_menu(user : User = None):

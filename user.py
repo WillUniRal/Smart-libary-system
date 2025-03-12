@@ -1,4 +1,4 @@
-
+from collections.abc import Callable
 from book import Book
 from abc import ABC, abstractmethod
 from random import randint
@@ -70,11 +70,11 @@ class User(ABC) :
     def loan_alert(self,book : Book,day):
         self._notification.append(f"The book \"{book.title}\" needs to be returned in {days(day)}")
 
-    @Menu.sub_menu
-    def book_search(self,name,author,func : callable = print):
+    @Menu.sub_menu()
+    def book_search(self,name,author,func : Callable = print):
         func(name,author)
 
-    @Menu.sub_menu
+    @Menu.sub_menu()
     def return_a_book(self,loan,book : Book):
         book.return_book()
 
