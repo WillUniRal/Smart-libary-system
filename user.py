@@ -71,8 +71,8 @@ class User(ABC) :
         self.__session = session
         return session
 
-    def notif(self,func) :
-        if self._notifications : return func
+    # def notif(self,func) :
+    #     if self._notifications : return func
             
     @abstractmethod
     def dashboard() :
@@ -119,8 +119,7 @@ class User(ABC) :
         if loan is None :
             print("You dont have any books to return")
             return
-        book : Book = loan.book
-        book.return_book()
+        loan.hand_in()
 
 def days(day):
     if day > 1 :

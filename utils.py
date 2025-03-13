@@ -20,8 +20,9 @@ class Menu:
         self.premission = Permission[perm.upper()]
         self.len : int = 0
         self.user = user
-        self.menus.append(self.end_menu)
-        self.push_func(self.end_menu[1])
+        if not self.end_menu[0] in str(self.menus) :
+            self.menus.append(self.end_menu)
+            self.push_func(self.end_menu[1])
         self.menus = self.get_avalible_commands()
         self.last_menu = None
 

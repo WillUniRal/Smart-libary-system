@@ -6,11 +6,11 @@ from user import Menu
 # Has all functional requirements for end user 
 
 
-def auth(session) :
+def auth() :
     def decorator(func) :
         def wrapper(*args,**kwargs) :
             try :
-                user = server.sessions[session]
+                user = server.sessions[args[0]]
             except KeyError :
                 print("Unauthorised")
             else :
@@ -42,20 +42,21 @@ def login() :
             print(error_msg)
             continue
 
-sess = login()
 
-@auth(sess)
-def open_menu(user : User = None):
-    
+
+@auth()
+def open_menu(session, user : User = None):
     # Menu.debug_sub_menus()
     user_menu = Menu(user.permission,server,user)
     while user.logged_in :
         print(user.dashboard())
-        user_menu.debug_sub_menus()
+        # user_menu.debug_sub_menus()
         user_menu.open()
         if user_menu.last_menu != "log_out" : input()
 
-open_menu()
+while True :
+    sess = login()
+    open_menu(sess)
 
 
 

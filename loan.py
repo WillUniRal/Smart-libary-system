@@ -18,5 +18,10 @@ class Loan :
     def send_notification(self) :
         self.user.loan_alert(self.book,self.days_due_in)
 
+    def hand_in(self) :
+        self.book.return_book()
+        self.user.loans.remove(self)
+        
+
         
 

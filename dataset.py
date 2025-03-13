@@ -20,7 +20,6 @@ class Server :
             else :
                 print(f"(SERVER) {i}: The book that was entered is not a valid book")
 
-
     def find_user(self, email) :
         user : User = None
         try :
