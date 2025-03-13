@@ -43,6 +43,10 @@ class User(ABC) :
     def permission(self) :
         return type(self).__name__
     
+    @property 
+    def logged_in(self):
+        return True if self.__session else False
+    
     @name.setter
     def name(self, value) :
         if not isinstance(value,tuple) : raise ValueError("Only accepts type (tuple)")
@@ -56,7 +60,7 @@ class User(ABC) :
         self.email = value
 
 
-    # def view_dashboard(self):
+    # def dashboard(self):
     #     return f"Welcome {self.name}! \n"\
     #     + "You currently have x book(s) Loaned \n"\
     #     + "x new notifications"
@@ -66,9 +70,12 @@ class User(ABC) :
         session = uuid.uuid4() if bcrypt.checkpw(pw,self.__pass_word) else None
         self.__session = session
         return session
+
+    def notif(self,func) :
+        if self._notifications : return func
             
     @abstractmethod
-    def view_dashboard() :
+    def dashboard() :
         pass
     
     def loan_alert(self,book : Book,day):
@@ -89,16 +96,29 @@ class User(ABC) :
                     print("Not an option")
                     continue
                 return self.loans[option-1]
+    
+    @Menu.sub_menu(True)
+    def log_out(self):
+        self.__session = None
+
+    @Menu.sub_menu()
+    def check_notifications(self) :
+        if not self._notifications :
+            print("You have no new notifications")
+            return
+        for notis in self._notifications :
+            print(notis)
 
     @Menu.sub_menu()
     def book_search(self,search_for_titles_or_an_author,func):
-
         book : Book = func(search_for_titles_or_an_author)
-        book.info()
+        if book : book.info()
 
     @Menu.sub_menu()
     def return_a_book(self,loan):
-        print("hi")
+        if loan is None :
+            print("You dont have any books to return")
+            return
         book : Book = loan.book
         book.return_book()
 

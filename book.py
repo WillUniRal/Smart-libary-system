@@ -8,7 +8,7 @@ class Book():
         self.quantity = quantity
 
     def __str__(self):
-        return f"{self.title} by {self.author}\n{self.bibliography}"
+        return f"{self.title} by {self.author}"
     
     def borrow(self) :
         if self.quantity > 0 :

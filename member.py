@@ -5,11 +5,11 @@ class Member(User):
         super().__init__(fname, lname, email, pass_word)
         self.restricted_until = None
 
-    def view_dashboard(self):
+    def dashboard(self):
         return f"Welcome {self.name}! \n"\
         + f"You currently have {len(self.loans)} book(s) Loaned \n"\
         + f"{len(self._notifications)} new notification(s)"
     
 # jaylyn = Member("Jaylyn","Cruz","jaycee@gmail.com")
-# print(jaylyn.view_dashboard())
+# print(jaylyn.dashboard())
         

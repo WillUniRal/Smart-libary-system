@@ -46,10 +46,14 @@ sess = login()
 
 @auth(sess)
 def open_menu(user : User = None):
-    print(user.view_dashboard())
+    
     # Menu.debug_sub_menus()
-    user_menu = Menu(user.permission)
-    print(user_menu)
+    user_menu = Menu(user.permission,server,user)
+    while user.logged_in :
+        print(user.dashboard())
+        user_menu.debug_sub_menus()
+        user_menu.open()
+        if user_menu.last_menu != "log_out" : input()
 
 open_menu()
 

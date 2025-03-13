@@ -4,7 +4,7 @@ from loan import Loan
 from user import Menu
 
 class Librarian(Member):
-    def view_dashboard(self):
+    def dashboard(self):
         return f"Welcome {self.name}! \n"\
         + f"You currently have {len(self.loans)} book(s) Loaned \n"\
         + f"{len(self._notifications)} new notification(s)"

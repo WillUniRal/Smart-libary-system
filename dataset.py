@@ -12,6 +12,15 @@ class Server :
         self.catalogue : list[Book] = []
         self.sessions : dict[UUID,User] = {}
 
+    def add_books(self, *books : Book) :
+        for i, book in enumerate(books,start=1):
+            if isinstance(book,Book) :
+                print(f"(SERVER) {i}: Succefully stored {book.title} in the libary")
+                self.catalogue.append(book)
+            else :
+                print(f"(SERVER) {i}: The book that was entered is not a valid book")
+
+
     def find_user(self, email) :
         user : User = None
         try :
@@ -65,7 +74,7 @@ class Server :
             return None
             
     def register(self, *users : User) :
-        for i,user in enumerate(users) :
+        for i,user in enumerate(users,start=1) :
             if isinstance(user,User) :
                 print(f"(SERVER) {i}: Succefully registered {user.name}, welcome to the libary")
                 self.__users[user.email] = user
@@ -77,6 +86,7 @@ class Server :
         for books in self.catalogue :
             if search.lower() in books.title.lower() :
                 hits[books.title] = books
+                continue
             if search in books.author.lower() :
                 hits[books.author] = books
 
@@ -114,5 +124,10 @@ e1 = Member("Freya","Myers","girlbossfreya@superrito.com","123IloveStanley") # f
 e2 = Librarian("Kiyumi","Maida","kyotoshidosha@bytedigi.com","nekoNekoNiii") #emailfake.com
 e3 = Admin("Vladlen","Voronov","blyat448@armyspy.com","Lebedinoe883")
 
+b1 = Book("Less goooo","Da Baby",3432,"I just signed a deal, I'm on\nYeah, yeah \nI go where I want \nGood, good")
+b2 = Book("The Hunger games","Suzanne Collins",123,"2 people from 12 districts, Fight to the death, only one can survive")
+b3 = Book("Harry potter","J.K Rowling",934,"You're a wizzard harry")
+
 server.register(e1,e2,e3)
+server.add_books(b1,b2,b3)
 
