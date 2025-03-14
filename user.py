@@ -3,11 +3,6 @@ from book import Book
 from abc import ABC, abstractmethod
 from random import randint
 from datetime import datetime
-# from utils import get_caller
-
-# # print("name:",get_caller())
-# # if get_caller() != "loan" :
-# #     from loan import Loan
 
 from utils import Menu
 
@@ -22,9 +17,13 @@ class User(ABC) :
         self.__email = email
 
         salt = bcrypt.gensalt()
-        if isinstance(pass_word,str) : pw_bytes = bytes(pass_word,encoding="utf-8")
-
-        self.__pass_word = bcrypt.hashpw(pw_bytes,salt)
+        if isinstance(pass_word,str) : 
+            pw_bytes = bytes(pass_word,encoding="utf-8")
+            self.__pass_word = bcrypt.hashpw(pw_bytes,salt)
+        else : 
+            # the password has been recieved in bytes meaning
+            # this is most likely a transfer so its already hashed
+            self.__pass_word = pass_word
 
         self.join_date = datetime.now()
         self._notifications = []
