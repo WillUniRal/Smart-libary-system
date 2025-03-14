@@ -6,11 +6,11 @@ class Member(User):
         super().__init__(fname, lname, email, pass_word)
         self.restricted_until = None
     def is_banned(self) :
-        print(self.restricted_until)
-        try :
-            return date.today() > self.restricted_until
-        except :
+        
+        if self.restricted_until == None :
             return False
+        return date.today() < self.restricted_until
+            
     def dashboard(self):
         if self.is_banned():
             return "You are banned until: "+ str(self.restricted_until)
