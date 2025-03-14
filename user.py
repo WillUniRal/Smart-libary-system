@@ -10,10 +10,11 @@ import bcrypt
 import uuid
 
 class User(ABC) :
-    def __init__(self,fname,lname,email,pass_word) :
-        self.first_name = fname
-        self.last_name = lname
-        self.id = randint(100000000,999999999)
+    def __init__(self,first_name,last_name,email,pass_word,id=None,join_date=None,_notifications=None,loans=None,**kwargs) :
+        self.first_name = first_name
+        self.last_name = last_name
+        self.id = self.init_attribute(id,randint(100000000,999999999))
+        
         self.__email = email
 
         salt = bcrypt.gensalt()
@@ -24,11 +25,17 @@ class User(ABC) :
             # the password has been recieved in bytes meaning
             # this is most likely a transfer so its already hashed
             self.__pass_word = pass_word
+        self.join_date = self.init_attribute(join_date,datetime.now())
 
-        self.join_date = datetime.now()
-        self._notifications = []
-        self.loans = [] # : list[Loan]
+        self._notifications = self.init_attribute(_notifications,[])
+        self.loans = self.init_attribute(loans,[])# : list[Loan]
         self.__session = None
+
+    def init_attribute(self,arg,value) :
+        if arg == None :
+            return value
+        else : return arg
+
 
     @property
     def name(self) :

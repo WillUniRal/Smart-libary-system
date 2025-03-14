@@ -16,8 +16,9 @@ class Admin(Librarian):
         classes = [Member,Librarian,Admin]
         role_class = next((cls for cls in classes if cls.__name__ == role), None)
         if role_class :
-            new_role = globals()[role](**vars(user))
-            return new_role
+            attributes = prepare_kwargs(vars(user)) 
+            new_role = globals()[role](**attributes)
+            return user, new_role
         else :
             print("Invalid Role")
             return None
@@ -25,6 +26,12 @@ class Admin(Librarian):
     @Menu.sub_menu()
     def ban_member(self, member : Member, duration) :
         member.restricted_until = date.today() + relativedelta(**duration)
+
+def prepare_kwargs(data):
+    return {
+        key.replace("_User__",""): value
+        for key, value in data.items()
+    }
     
 #testing
 if __name__ == '__main__' :

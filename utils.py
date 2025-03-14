@@ -91,7 +91,9 @@ class Menu:
         args = self.get_args(sub_m)
         # print(args)
         self.last_menu = self.menus[option][0]
-        self.menus[option][1](self.user,*args)
+        returned_val = self.menus[option][1](self.user,*args)
+        if isinstance(returned_val,tuple) :
+            self.server.register(returned_val[1])
 
 
     def arg_search(self,arg,func) :
@@ -110,16 +112,17 @@ class Menu:
                 args.append(self.arg_search(arg,self.server.get_user))
             elif arg == "duration" :
                 while True :
-                    durkws = input("Enter a duration: ")
+                    durkws = input("Enter a duration: ").replace(" ","").lower()
                     kwargs = durkws.split(",")
                     duration_dict = []
                     try :
                         for kw_eq_val in kwargs :
                             kw_val = kw_eq_val.split("=")
                             kw_val[1] = int(kw_val[1])
+                            if not kw_val[0] in ('days','weeks','months','years') : raise ValueError
                             duration_dict.append(kw_val)
-                    except ValueError:
-                        print("SyntaxError: day=x,week=y")
+                    except :
+                        print("SyntaxError: days=x,weeks=y...")
                         continue
                     else:
                         args.append(dict(duration_dict))
