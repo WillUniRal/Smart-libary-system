@@ -93,6 +93,7 @@ class Menu:
         self.last_menu = self.menus[option][0]
         self.menus[option][1](self.user,*args)
 
+
     def arg_search(self,arg,func) :
         while True :
             argy = func(input(f"Search for a {arg}: "))
@@ -105,11 +106,24 @@ class Menu:
     def get_args(self,func_key) :
         args= []
         for arg in self.arguments[func_key] :
-            if arg == "user":
+            if arg == "user" or arg == "member":
                 args.append(self.arg_search(arg,self.server.get_user))
             elif arg == "duration" :
-                # do something extra
-                pass
+                while True :
+                    durkws = input("Enter a duration: ")
+                    kwargs = durkws.split(",")
+                    duration_dict = []
+                    try :
+                        for kw_eq_val in kwargs :
+                            kw_val = kw_eq_val.split("=")
+                            kw_val[1] = int(kw_val[1])
+                            duration_dict.append(kw_val)
+                    except ValueError:
+                        print("SyntaxError: day=x,week=y")
+                        continue
+                    else:
+                        args.append(dict(duration_dict))
+                        break
             elif arg == "book" :
                 args.append(self.arg_search(arg,self.server.get_book))
             elif arg == "loan" :

@@ -50,7 +50,7 @@ def open_menu(session, user : User = None):
     user_menu = Menu(user.permission,server,user)
     while user.logged_in :
         print(user.dashboard())
-        # user_menu.debug_sub_menus()
+        if user.is_banned() : return
         user_menu.open()
         if user_menu.last_menu != "log_out" : input()
 
