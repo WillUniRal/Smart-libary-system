@@ -23,7 +23,7 @@ class Admin(Librarian):
             return None
     
     @Menu.sub_menu()
-    def ban_member(self, member : Member, **duration) :
+    def ban_member(self, member : Member, duration) :
         member.restricted_until = date.today() + relativedelta(**duration)
     
 #testing
