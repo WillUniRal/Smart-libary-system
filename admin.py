@@ -8,7 +8,7 @@ class Admin(Librarian):
     def dashboard(self):
         return f"Welcome {self.name}! \n"\
         + f"You currently have {len(self.loans)} book(s) Loaned \n"\
-        + f"{len(self._notifications)} new notification(s)"\
+        + f"{len(self._notifications)} new notification(s) \n"\
         + "x new Library members this month"
     
     @Menu.sub_menu()
@@ -16,7 +16,8 @@ class Admin(Librarian):
         classes = [Member,Librarian,Admin]
         role_class = next((cls for cls in classes if cls.__name__ == role), None)
         if role_class :
-            attributes = prepare_kwargs(vars(user)) 
+            attributes = prepare_kwargs(vars(user))
+            # print(attributes)
             new_role = globals()[role](**attributes)
             return user, new_role
         else :
